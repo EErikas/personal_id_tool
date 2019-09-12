@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <h1 class="mt-5">Generate Personal Lithuanian IDs</h1>
+    {% csrf_token %}
+    <form method="get">
+        {{ form|crispy }}
+        <input type="submit" class="btn-lg btn-primary" value="Generate IDs">
+    </form>
+    {% if results %}
+        {% with valid_ids=results %}
+            {% include 'id_list.html' %}
+        {% endwith %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% if valid_ids %}
+    <h3 class="mt-5">Valid format personal IDs (Reikalavimus atitinkantys asmens kodai)</h3>
+    <ol>
+        {% for foo in valid_ids %}
+            <li><a href="{% url 'personal-id-checker' personal_id=foo %}">{{ foo }}</a></li>
+        {% endfor %}
+    </ol>
+{% endif %}
+{% if invalid_ids %}
+    <h3 class="mt-5">Invalid format personal IDs (Reikalavimų neatitinkantys asmens kodai)</h3>
+    <ol>
+        {% for foo in invalid_ids %}
+            <li>{{ foo }}</li>
+        {% endfor %}
+    </ol>
+{% endif %}
