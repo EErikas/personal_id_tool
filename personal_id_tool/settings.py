@@ -11,20 +11,23 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+with open(os.path.join(BASE_DIR, 'config.json'), 'r') as config_file:
+    config = json.load(config_file)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '559k)1)zlbtw+dk!=i5j+y=9fdhq1e4^n78y4q56__=jxrnhxl'
+SECRET_KEY = config.get('SECRET_KEY', '559k)1)zlbtw+dk!=i5j+y=9fdhq1e4^n78y4q56__=jxrnhxl')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config.get('DEBUG', True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config.get('ALLOWED_HOSTS', [])
 
 # Application definition
 
