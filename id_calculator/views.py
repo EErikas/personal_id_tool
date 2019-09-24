@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.contrib import messages
 from .forms import IdCarverForm, IdGeneratorForm
-from .id_calculations.id_generator import personal_id_generator
-from .id_calculations.id_information import text_sanitizer, get_personal_description
+from .personal_id_tools.lithuanian_personal_ID_tools import LithuanianIDTools as lpid
+from .personal_id_tools.id_information import text_sanitizer
 
 
 def detect_ids(request):
@@ -29,7 +29,7 @@ def detect_ids(request):
 
 def personal_id_data(request, personal_id):
     return render(request, 'personal_data_viewer.html',
-                  context={'data': get_personal_description(personal_id)})
+                  context={'data': lpid.get_personal_description(personal_id)})
 
 
 def generate_ids(request):
@@ -40,8 +40,8 @@ def generate_ids(request):
     if request.method == 'GET':
         form = IdGeneratorForm(request.GET)
         if form.is_valid():
-            exceptions = bool(request.POST.get('no_exceptions', False))
-            results = [personal_id_generator(exceptions) for foo in range(int(request.GET['number_of_ids']))]
+            exceptions = bool(request.GET.get('no_exceptions', False))
+            results = [lpid.personal_id_generator(exceptions) for foo in range(int(request.GET['number_of_ids']))]
             context = {
                 'title': 'ID carver',
                 'form': form,
