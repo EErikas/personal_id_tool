@@ -6,8 +6,12 @@ from .personal_id_tools.id_information import text_sanitizer
 
 
 def detect_ids(request):
+    # Define context values:
     context = {
         'title': 'Personal ID carver',
+        'form_name': 'Find Personal Lithuanian IDs',
+        'method': 'post',
+        'button_name': 'Find IDs',
         'form': IdCarverForm()
     }
     if request.method == 'POST':
@@ -15,11 +19,12 @@ def detect_ids(request):
         if form.is_valid():
             exceptions = bool(request.POST.get('no_exceptions', False))
             results = text_sanitizer(request.POST['text'], exceptions)
-            context = {
-                'title': 'ID carver',
+            # Update context w/ form data if form is submitted:
+            context.update({
                 'form': form,
                 'results': results
-            }
+            })
+
             if all(len(value) == 0 for value in results.values()):
                 messages.add_message(request, messages.WARNING,
                                      'No strings resembling personal or corporate IDs were found')
@@ -33,8 +38,11 @@ def personal_id_data(request, personal_id):
 
 
 def generate_ids(request):
+    # Define context values:
     context = {
         'title': 'Personal ID generator',
+        'form_name': 'Generate Personal Lithuanian IDs',
+        'button_name': 'Generate IDs',
         'form': IdGeneratorForm()
     }
     if request.method == 'GET':
@@ -42,9 +50,9 @@ def generate_ids(request):
         if form.is_valid():
             exceptions = bool(request.GET.get('no_exceptions', False))
             results = [lpid.personal_id_generator(exceptions) for foo in range(int(request.GET['number_of_ids']))]
-            context = {
-                'title': 'ID carver',
+            # Update context w/ form data if form is submitted:
+            context.update({
                 'form': form,
                 'results': results
-            }
+            })
     return render(request, 'id_generator.html', context=context)

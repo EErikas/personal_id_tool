@@ -1,0 +1,12 @@
+{% comment %}
+filter 'default_is_none' is used to define value, when variable is not passed to a form
+{% endcomment %}
+{% load crispy_forms_tags %}
+<h1 class="mt-5">{{ form_name }}</h1>
+<form method="{{ method|default_if_none:'get' }}">
+    {% if method == 'post' %}
+        {% csrf_token %}
+    {% endif %}
+    {{ form|crispy }}
+    <input type="submit" class="btn-lg btn-primary" value="{{ button_name|default_if_none:'Submit' }}">
+</form>
